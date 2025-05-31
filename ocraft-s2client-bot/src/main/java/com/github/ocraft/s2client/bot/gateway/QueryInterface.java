@@ -316,7 +316,7 @@ public interface QueryInterface {
     }
 
     private static Point2d pushAwayFromNodes(Point2d basePos, List<UnitInPool> nodes) {
-        Point2d pushedAwayPos = basePos;
+        Point2d originalBasePos = basePos;
         for (UnitInPool node : nodes) {
             Point2d nodePos = node.unit().getPosition().toPoint2d().roundToHalfPointAccuracy();
             boolean isMineralNode = node.unit().getType().toString().contains("MINERAL");
@@ -328,22 +328,22 @@ public interface QueryInterface {
             float yDist = Math.abs(nodePos.getY() - basePos.getY());
             if (xDist + (isMineralNode ? 0.5f : 0) <= yDist) {
                 if (xDist < xMinDistCorner && yDist < yMinDistCenter) {
-                    pushedAwayPos = moveYFromNodeBy(basePos, nodePos, yMinDistCenter);
+                    basePos = moveYFromNodeBy(basePos, nodePos, yMinDistCenter);
                 }
                 else if (xDist < xMinDistCenter && yDist < yMinDistCorner) {
-                    pushedAwayPos = moveYFromNodeBy(basePos, nodePos, yMinDistCorner);
+                    basePos = moveYFromNodeBy(basePos, nodePos, yMinDistCorner);
                 }
             }
             if (xDist + (isMineralNode ? 0.5f : 0) >= yDist) {
                 if (yDist < yMinDistCorner && xDist < xMinDistCenter) {
-                    pushedAwayPos = moveXFromNodeBy(basePos, nodePos, xMinDistCenter);
+                    basePos = moveXFromNodeBy(basePos, nodePos, xMinDistCenter);
                 }
                 else if (yDist < yMinDistCenter && xDist < xMinDistCorner) {
-                    pushedAwayPos = moveXFromNodeBy(basePos, nodePos, xMinDistCorner);
+                    basePos = moveXFromNodeBy(basePos, nodePos, xMinDistCorner);
                 }
             }
-            if (!pushedAwayPos.equals(basePos)) {
-                return pushedAwayPos;
+            if (!originalBasePos.equals(basePos)) {
+                return basePos;
             }
         }
         return null;
