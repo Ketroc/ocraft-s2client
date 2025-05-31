@@ -326,7 +326,7 @@ public interface QueryInterface {
             float yMinDistCorner = isMineralNode ? 5f : 6;
             float xDist = Math.abs(nodePos.getX() - basePos.getX());
             float yDist = Math.abs(nodePos.getY() - basePos.getY());
-            if (xDist + (isMineralNode ? 0.5f : 0) >= yDist) {
+            if (xDist + (isMineralNode ? 0.5f : 0) <= yDist) {
                 if (xDist < xMinDistCorner && yDist < yMinDistCenter) {
                     pushedAwayPos = moveYFromNodeBy(basePos, nodePos, yMinDistCenter);
                 }
@@ -334,7 +334,7 @@ public interface QueryInterface {
                     pushedAwayPos = moveYFromNodeBy(basePos, nodePos, yMinDistCorner);
                 }
             }
-            if (xDist + (isMineralNode ? 0.5f : 0) <= yDist) {
+            if (xDist + (isMineralNode ? 0.5f : 0) >= yDist) {
                 if (yDist < yMinDistCorner && xDist < xMinDistCenter) {
                     pushedAwayPos = moveXFromNodeBy(basePos, nodePos, xMinDistCenter);
                 }
