@@ -155,7 +155,16 @@ public interface QueryInterface {
             basePos = estimateBasePos(basePos, nodes);
 
             //adjust basePos by grid restraints on each resource node in the cluster
+            int i = -1;
             while (true) {
+                i++;
+                if (debug != null) {
+                    Point basePoint = basePos.toPoint((float)Math.ceil(observation.terrainHeight(basePos)));
+                    debug.debugBoxOut(basePoint.add(2.5f, 2.5f, 0), basePoint.sub(2.5f, 2.5f, 0), Color.RED);
+                    debug.debugTextOut(i+"", basePoint, Color.RED, 14);
+                    debug.sendDebug();
+                    int aslkdjf = 239847;
+                }
                 Point2d finalBasePos = basePos;
                 nodes = nodes.stream()
                         .sorted(Comparator.comparing(u -> u.unit().getPosition().toPoint2d().distance(finalBasePos)))
