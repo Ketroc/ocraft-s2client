@@ -325,21 +325,25 @@ public interface QueryInterface {
             float yMinDistCorner = isMineralNode ? 5f : 6;
             float xDist = Math.abs(nodePos.getX() - basePos.getX());
             float yDist = Math.abs(nodePos.getY() - basePos.getY());
-            if (xDist + (isMineralNode ? 0.5f : 0) > yDist) {
+            Point2d pushedAwayPos = null;
+            if (xDist + (isMineralNode ? 0.5f : 0) >= yDist) {
                 if (xDist < xMinDistCorner && yDist < yMinDistCenter) {
-                    return moveYFromNodeBy(basePos, nodePos, yMinDistCenter);
+                    pushedAwayPos = moveYFromNodeBy(basePos, nodePos, yMinDistCenter);
                 }
                 else if (xDist < xMinDistCenter && yDist < yMinDistCorner) {
-                    return moveYFromNodeBy(basePos, nodePos, yMinDistCorner);
+                    pushedAwayPos = moveYFromNodeBy(basePos, nodePos, yMinDistCorner);
                 }
             }
-            else {
+            else if (xDist + (isMineralNode ? 0.5f : 0) <= yDist) {
                 if (yDist < yMinDistCorner && xDist < xMinDistCenter) {
-                    return moveXFromNodeBy(basePos, nodePos, xMinDistCenter);
+                    pushedAwayPos = moveXFromNodeBy(basePos, nodePos, xMinDistCenter);
                 }
                 else if (yDist < yMinDistCenter && xDist < xMinDistCorner) {
-                    return moveXFromNodeBy(basePos, nodePos, xMinDistCorner);
+                    pushedAwayPos = moveXFromNodeBy(basePos, nodePos, xMinDistCorner);
                 }
+            }
+            if (pushedAwayPos != null) {
+                return pushedAwayPos;
             }
         }
         return null;
