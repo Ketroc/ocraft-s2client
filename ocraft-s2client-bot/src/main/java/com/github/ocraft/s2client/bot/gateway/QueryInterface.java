@@ -26,7 +26,6 @@ package com.github.ocraft.s2client.bot.gateway;
  * #L%
  */
 
-import com.github.ocraft.s2client.protocol.data.Abilities;
 import com.github.ocraft.s2client.protocol.data.Ability;
 import com.github.ocraft.s2client.protocol.data.UnitType;
 import com.github.ocraft.s2client.protocol.data.Units;
@@ -326,7 +325,7 @@ public interface QueryInterface {
             float yMinDistCorner = isMineralNode ? 5f : 6;
             float xDist = Math.abs(nodePos.getX() - basePos.getX());
             float yDist = Math.abs(nodePos.getY() - basePos.getY());
-            if (xDist > yDist) {
+            if (xDist + (isMineralNode ? 0.5f : 0) > yDist) {
                 if (xDist < xMinDistCorner && yDist < yMinDistCenter) {
                     return moveYFromNodeBy(basePos, nodePos, yMinDistCenter);
                 }
