@@ -317,6 +317,9 @@ public interface QueryInterface {
             float yMinDistCorner = isMineralNode ? 5f : 6;
             float xDist = Math.abs(nodePos.getX() - basePos.getX());
             float yDist = Math.abs(nodePos.getY() - basePos.getY());
+            if (Math.abs(xDist - yDist) <= 1f) {  // skip edge-case for corners
+                continue;
+            }
             if (xDist < yDist) {
                 if (xDist < xMinDistCorner && yDist < yMinDistCenter) {
                     return moveYFromNodeBy(basePos, nodePos, yMinDistCenter);
