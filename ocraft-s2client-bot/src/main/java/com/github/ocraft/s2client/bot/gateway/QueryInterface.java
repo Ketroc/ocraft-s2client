@@ -253,6 +253,11 @@ public interface QueryInterface {
             Point2d centerOfCluster = getCenterPos(targetCluster.getValue());
             clusters.put(centerOfCluster, clusters.remove(targetCluster.getKey()));
         }
+
+        // bit of a hack to remove what appears to be a rich mineral wall (not a base)
+        clusters.entrySet().removeIf(entry ->
+                entry.getValue().stream().allMatch(u -> u.unit().getType() == Units.NEUTRAL_RICH_MINERAL_FIELD));
+
         return clusters;
     }
 
