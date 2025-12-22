@@ -132,7 +132,7 @@ public interface QueryInterface {
         List<UnitInPool> resources = observation.getUnits(unitInPool -> {
             Set<UnitType> nodes = new HashSet<>(asList(
                     Units.NEUTRAL_MINERAL_FIELD, Units.NEUTRAL_MINERAL_FIELD750,
-                    Units.NEUTRAL_RICH_MINERAL_FIELD, Units.NEUTRAL_RICH_MINERAL_FIELD750,
+                    Units.NEUTRAL_RICH_MINERAL_FIELD750,
                     Units.NEUTRAL_PURIFIER_MINERAL_FIELD, Units.NEUTRAL_PURIFIER_MINERAL_FIELD750,
                     Units.NEUTRAL_PURIFIER_RICH_MINERAL_FIELD, Units.NEUTRAL_PURIFIER_RICH_MINERAL_FIELD750,
                     Units.NEUTRAL_LAB_MINERAL_FIELD, Units.NEUTRAL_LAB_MINERAL_FIELD750,
@@ -143,6 +143,7 @@ public interface QueryInterface {
             ));
             return nodes.contains(unitInPool.unit().getType());
         });
+        resources.addAll(observation.getUnits(unitInPool -> unitInPool.unit().getType() == Units.NEUTRAL_RICH_MINERAL_FIELD));
 
         List<Point> expansionLocations = new ArrayList<>();
         Map<Point2d, List<UnitInPool>> clusters = cluster(resources, 15);
