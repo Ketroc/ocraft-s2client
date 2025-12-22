@@ -146,7 +146,7 @@ public interface QueryInterface {
         resources.addAll(observation.getUnits(unitInPool -> unitInPool.unit().getType() == Units.NEUTRAL_RICH_MINERAL_FIELD));
 
         List<Point> expansionLocations = new ArrayList<>();
-        Map<Point2d, List<UnitInPool>> clusters = cluster(resources, 15);
+        Map<Point2d, List<UnitInPool>> clusters = cluster(resources, 14);
         for (Map.Entry<Point2d, List<UnitInPool>> cluster : clusters.entrySet()) {
 
             Point2d basePos = cluster.getKey();
