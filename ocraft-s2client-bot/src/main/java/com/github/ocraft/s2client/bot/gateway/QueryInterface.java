@@ -26,7 +26,6 @@ package com.github.ocraft.s2client.bot.gateway;
  * #L%
  */
 
-import com.github.ocraft.s2client.protocol.data.Abilities;
 import com.github.ocraft.s2client.protocol.data.Ability;
 import com.github.ocraft.s2client.protocol.data.UnitType;
 import com.github.ocraft.s2client.protocol.data.Units;
@@ -42,6 +41,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The QueryInterface provides additional data not contained in the observation.
@@ -50,6 +51,8 @@ import static java.util.Arrays.asList;
  * - Always try and batch things up. These queries are effectively synchronous and will block until returned.
  */
 public interface QueryInterface {
+
+    Logger log = LoggerFactory.getLogger(QueryInterface.class);
 
     /**
      * Returns a list of abilities represented as a AvailableAbilities see the Abilities enum for their corresponding,
@@ -146,7 +149,7 @@ public interface QueryInterface {
         resources.addAll(observation.getUnits(unitInPool -> unitInPool.unit().getType() == Units.NEUTRAL_RICH_MINERAL_FIELD));
 
         List<Point> expansionLocations = new ArrayList<>();
-        Map<Point2d, List<UnitInPool>> clusters = cluster(resources, 14);
+        Map<Point2d, List<UnitInPool>> clusters = cluster(resources, 14.87);
         for (Map.Entry<Point2d, List<UnitInPool>> cluster : clusters.entrySet()) {
 
             Point2d basePos = cluster.getKey();
@@ -156,8 +159,15 @@ public interface QueryInterface {
             basePos = estimateBasePos(basePos, nodes);
 
             //adjust basePos by grid restraints on each resource node in the cluster
+            int loopCount = 0;
             while (true) {
+                // protect against pathological cases where we never converge
+                loopCount++;
                 Point2d finalBasePos = basePos;
+                if (loopCount > 20) {
+                    log.warn("calculateExpansionLocations: exceeded max adjustments. basePos{} is likely incorrect", basePos);
+                    break;
+                }
                 nodes = nodes.stream()
                         .sorted(Comparator.comparing(u -> u.unit().getPosition().toPoint2d().distance(finalBasePos)))
                         .collect(Collectors.toList());
